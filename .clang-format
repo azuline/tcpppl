@@ -1,0 +1,17 @@
+---
+Language: Cpp
+Standard: c++20
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 120
+AlignAfterOpenBracket: Align
+AlignOperands: true
+AllowShortFunctionsOnASingleLine: None
+AllowShortCaseLabelsOnASingleLine: false
+BinPackArguments: false
+BinPackParameters: false
+ContinuationIndentWidth: 8
+IndentCaseLabels: true
+IncludeBlocks: Regroup
+SpaceAfterCStyleCast: true
+UseTab: Never
