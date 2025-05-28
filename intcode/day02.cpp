@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <vector>
 
 const int ADD_CODE = 1;
@@ -20,7 +21,10 @@ program parse_program(std::istream &input_stream) {
     return program;
 }
 
-void execute_program(program &program) {
+int execute_program(program &program, std::tuple<int, int> inputs) {
+    program[1] = get<0>(inputs);
+    program[2] = get<1>(inputs);
+
     int pc = 0;
     while (program[pc] != HALT_CODE) {
         std::fprintf(stderr, "executing opcode program[%d]=%d\n", pc, program[pc]);
@@ -41,14 +45,11 @@ void execute_program(program &program) {
         }
         std::fprintf(stderr, "    pc = %d\n", pc);
     }
+    return program[0];
 }
 
 void part1(program program) {
-    // Initial program modifications.
-    program[1] = 12;
-    program[2] = 2;
-    execute_program(program);
-    std::printf("Part 1: %d\n", program[0]);
+    std::printf("Part 1: %d\n", execute_program(program, {12, 2}));
 }
 
 void part2(program program) {
@@ -56,14 +57,13 @@ void part2(program program) {
     for (int noun = 0; noun < 100; noun++) {
         for (int verb = 0; verb < 100; verb++) {
             auto clone = program;
-            clone[1] = noun;
-            clone[2] = verb;
+            int result;
             try {
-                execute_program(clone);
+                result = execute_program(clone, {noun, verb});
             } catch (std::invalid_argument) {
                 continue;
             }
-            if (clone[0] == 19690720) {
+            if (result == 19690720) {
                 solution = 100 * noun + verb;
                 break;
             }
