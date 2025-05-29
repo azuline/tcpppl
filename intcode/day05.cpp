@@ -50,6 +50,16 @@ int Program::execute(std::tuple<int, int> inputs) {
             std::fprintf(stderr, "    *%d=%d*%d\n", memory[pc + 3], arg1, arg2);
             memory[memory[pc + 3]] = arg1 * arg2;
             pc += 4;
+        } else if (memory[pc] == INPUT_CODE) {
+            auto arg1 = memory[pc + 1];
+            std::fprintf(stderr, "    *%d=%d\n", arg1, arg1);
+            memory[arg1] = arg1;
+            pc += 2;
+        } else if (memory[pc] == OUTPUT_CODE) {
+            auto arg1 = memory[pc + 1];
+            std::fprintf(stderr, "    print(*%d)\n", arg1);
+            std::printf("%d", memory[arg1]);
+            pc += 2;
         } else {
             throw std::invalid_argument(std::format("memory[{}]={} is not a supported opcode", pc, memory[pc]));
         }
@@ -82,11 +92,8 @@ void part2(Program program) {
     std::printf("Part 2: %d\n", solution);
 }
 
-const std::string TEST_INPUT = "1,9,10,3,2,3,11,0,99,30,40,50";
-
 int main() {
     std::ifstream real_input("inputs/day02.txt");
-    std::istringstream test_input{TEST_INPUT};
     auto input = &real_input;
 
     Program program = Program::parse(*input);
