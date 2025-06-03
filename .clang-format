@@ -3,7 +3,7 @@ Language: Cpp
 Standard: c++20
 BasedOnStyle: LLVM
 IndentWidth: 4
-ColumnLimit: 120
+ColumnLimit: 180
 AlignAfterOpenBracket: Align
 AlignOperands: true
 AllowShortFunctionsOnASingleLine: None
