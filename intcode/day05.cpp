@@ -69,7 +69,7 @@ int computer(Program p) {
 
         switch (in.opcode) {
             case Opcode::halt: {
-                break;
+                goto terminate;
             }
             case Opcode::add: {
                 auto arg1 = eval_argument(p, p.memory[pc + 1], in.mode1);
@@ -78,6 +78,7 @@ int computer(Program p) {
                 std::fprintf(stderr, "    *%d = %d + %d\n", arg3, arg1, arg2);
                 p.memory[arg3] = arg1 + arg2;
                 pc += 4;
+                break;
             }
             case Opcode::mul: {
                 auto arg1 = eval_argument(p, p.memory[pc + 1], in.mode1);
@@ -86,6 +87,7 @@ int computer(Program p) {
                 std::fprintf(stderr, "    *%d = %d * %d\n", arg3, arg1, arg2);
                 p.memory[arg3] = arg1 * arg2;
                 pc += 4;
+                break;
             }
             case Opcode::input: {
                 auto arg1 = p.memory[pc + 1];
@@ -96,24 +98,28 @@ int computer(Program p) {
                 std::fprintf(stderr, "    *%d = %d\n", arg1, arg2);
                 p.memory[arg1] = arg2;
                 pc += 2;
+                break;
             }
             case Opcode::output: {
                 auto arg1 = eval_argument(p, p.memory[pc + 1], in.mode1);
                 std::fprintf(stderr, "    print(%d)\n", arg1);
                 std::printf("Writing output: %d\n", arg1);
                 pc += 2;
+                break;
             }
             case Opcode::jump_true: {
                 auto arg1 = eval_argument(p, p.memory[pc + 1], in.mode1);
                 auto arg2 = eval_argument(p, p.memory[pc + 2], in.mode2);
                 std::fprintf(stderr, "    pc = %d ? %d : pc+3\n", arg1, arg2);
                 pc = arg1 != 0 ? arg2 : pc + 3;
+                break;
             }
             case Opcode::jump_false: {
                 auto arg1 = eval_argument(p, p.memory[pc + 1], in.mode1);
                 auto arg2 = eval_argument(p, p.memory[pc + 2], in.mode2);
                 std::fprintf(stderr, "    pc = !%d ? %d : pc+3\n", arg1, arg2);
                 pc = arg1 == 0 ? arg2 : pc + 3;
+                break;
             }
             case Opcode::less_than: {
                 auto arg1 = eval_argument(p, p.memory[pc + 1], in.mode1);
@@ -122,6 +128,7 @@ int computer(Program p) {
                 std::fprintf(stderr, "    *%d = %d < %d\n", arg3, arg1, arg2);
                 p.memory[arg3] = arg1 < arg2 ? 1 : 0;
                 pc += 4;
+                break;
             }
             case Opcode::equals: {
                 auto arg1 = eval_argument(p, p.memory[pc + 1], in.mode1);
@@ -130,12 +137,14 @@ int computer(Program p) {
                 std::fprintf(stderr, "    *%d = %d == %d\n", arg3, arg1, arg2);
                 p.memory[arg3] = arg1 == arg2 ? 1 : 0;
                 pc += 4;
+                break;
             }
             default: {
                 throw std::invalid_argument(std::format("memory[{}]={} is not a supported opcode", pc, p.memory[pc]));
             }
         }
     }
+terminate:
     return p.memory[0];
 };
 
