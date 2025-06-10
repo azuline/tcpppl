@@ -222,7 +222,7 @@ void part2(Program program) {
         largest_thruster = std::max(largest_thruster, thruster);
     } while (std::next_permutation(signals.begin(), signals.end()));
 
-    std::cout << std::format("Part 1: {}", largest_thruster) << std::endl;
+    std::cout << std::format("Part 2: {}", largest_thruster) << std::endl;
 };
 
 // clang-format off
